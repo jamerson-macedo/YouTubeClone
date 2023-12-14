@@ -1,11 +1,13 @@
 package com.example.youtubeclone
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
@@ -19,6 +21,8 @@ import okhttp3.Request
 
 class MainActivity : AppCompatActivity() {
     private lateinit var adaptervideos: VideoAdapter
+    private lateinit var view:View
+    private lateinit var conteiner :MotionLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,10 +32,14 @@ class MainActivity : AppCompatActivity() {
         val rc = findViewById<RecyclerView>(R.id.rc_video)
         val listaVideo = mutableListOf<Data>()
         adaptervideos = VideoAdapter(listaVideo) { video ->
-            println(video)
+            showOverlayView(video)
         }
         rc.layoutManager = LinearLayoutManager(this)
         rc.adapter = adaptervideos
+        // sombra
+        view=findViewById(R.id.view_layer)
+        // deixando transparente
+        view.alpha=0f
 
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -43,11 +51,42 @@ class MainActivity : AppCompatActivity() {
                     listaVideo.clear()
                     listaVideo.addAll(it.data)
                     adaptervideos.notifyDataSetChanged()
-                    val progress = findViewById<FrameLayout>(R.id.progress_recycler)
-                    progress.visibility = View.GONE
+                    conteiner = findViewById(R.id.motion_container)
+                    conteiner.removeView(findViewById<FrameLayout>(R.id.progress_recycler))
                 }
             }
         }
+
+    }
+    // quando clica no video o alfa sobre para 0.5
+
+
+    private fun showOverlayView(video: Data) {
+        view.animate().apply {
+            duration=400
+            alpha(0.5f)
+        }
+        conteiner.setTransitionListener(object : MotionLayout.TransitionListener {
+            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {
+            }
+
+            override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {
+                if(progress>0.5f){
+                    view.alpha=1.0f - progress
+                }else{
+                    view.alpha=0.5f
+                }
+
+            }
+
+            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+
+            }
+
+            override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {
+
+            }
+        })
 
     }
 
