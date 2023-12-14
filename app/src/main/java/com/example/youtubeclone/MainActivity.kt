@@ -1,8 +1,11 @@
 package com.example.youtubeclone
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.View
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
@@ -19,8 +22,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = ""
         val rc = findViewById<RecyclerView>(R.id.rc_video)
-        val constraintLayout = findViewById<ConstraintLayout>(R.id.motion_container)
         val listaVideo = mutableListOf<Data>()
         adaptervideos = VideoAdapter(listaVideo) { video ->
             println(video)
@@ -38,11 +43,17 @@ class MainActivity : AppCompatActivity() {
                     listaVideo.clear()
                     listaVideo.addAll(it.data)
                     adaptervideos.notifyDataSetChanged()
-                    constraintLayout.removeView(findViewById(R.id.progress_recycler))
+                    val progress = findViewById<FrameLayout>(R.id.progress_recycler)
+                    progress.visibility = View.GONE
                 }
             }
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     private fun getVideos(): ListVideo? {
