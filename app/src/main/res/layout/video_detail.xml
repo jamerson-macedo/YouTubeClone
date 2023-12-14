@@ -1,22 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View
-        android:layout_width="match_parent"
-        android:id="@+id/view_layer"
-        android:visibility="visible"
-        android:background="@color/black"
-        android:layout_height="match_parent"/>
 
+    <View
+        android:id="@+id/view_layer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:visibility="visible" />
     <ImageView
         android:id="@+id/video_player"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@color/colorPrimary"
+        android:src="@color/colorPrimary" />
 
-        />
+    <LinearLayout
+        android:id="@+id/video_player_title"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="ola mundo"
+            android:layout_marginTop="10dp" android:layout_marginStart="30dp"
+            android:id="@+id/miniplayer_text"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="ola mundo 2"
+            android:layout_marginStart="30dp"
+            android:id="@+id/miniplayer_subtitle"/>
+    </LinearLayout>
+
+
+
+    <SurfaceView
+        android:id="@+id/surface_player"
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
 
 
 </merge>
