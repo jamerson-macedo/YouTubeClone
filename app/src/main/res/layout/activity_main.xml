@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:id="@+id/motion_container"
     app:layoutDescription="@xml/scene"
-    app:showPaths="true"
     tools:context=".MainActivity">
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
