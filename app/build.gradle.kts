@@ -7,6 +7,7 @@ android {
     namespace = "com.example.youtubeclone"
     compileSdk = 34
 
+
     defaultConfig {
         applicationId = "com.example.youtubeclone"
         minSdk = 24
@@ -32,6 +33,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        viewBinding =true
     }
 }
 

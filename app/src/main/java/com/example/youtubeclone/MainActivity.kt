@@ -1,16 +1,18 @@
 package com.example.youtubeclone
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -21,8 +23,8 @@ import okhttp3.Request
 
 class MainActivity : AppCompatActivity() {
     private lateinit var adaptervideos: VideoAdapter
-    private lateinit var view:View
-    private lateinit var conteiner :MotionLayout
+    private lateinit var view: View
+    private lateinit var conteiner: MotionLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,9 +39,9 @@ class MainActivity : AppCompatActivity() {
         rc.layoutManager = LinearLayoutManager(this)
         rc.adapter = adaptervideos
         // sombra
-        view=findViewById(R.id.view_layer)
+        view = findViewById(R.id.view_layer)
         // deixando transparente
-        view.alpha=0f
+        view.alpha = 0f
 
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -63,18 +65,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun showOverlayView(video: Data) {
         view.animate().apply {
-            duration=400
+            duration = 400
             alpha(0.5f)
         }
         conteiner.setTransitionListener(object : MotionLayout.TransitionListener {
-            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {
+            override fun onTransitionStarted(
+                motionLayout: MotionLayout?,
+                startId: Int,
+                endId: Int
+            ) {
             }
 
-            override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {
-                if(progress>0.5f){
-                    view.alpha=1.0f - progress
-                }else{
-                    view.alpha=0.5f
+            override fun onTransitionChange(
+                motionLayout: MotionLayout?,
+                startId: Int,
+                endId: Int,
+                progress: Float
+            ) {
+                if (progress > 0.5f) {
+                    view.alpha = 1.0f - progress
+                } else {
+                    view.alpha = 0.5f
                 }
 
             }
@@ -83,10 +94,28 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {
+            override fun onTransitionTrigger(
+                motionLayout: MotionLayout?,
+                triggerId: Int,
+                positive: Boolean,
+                progress: Float
+            ) {
 
             }
         })
+        val detailAdapter = VideoDetail(videos())
+        val recyclerview = findViewById<RecyclerView>(R.id.rv_similar)
+        recyclerview.layoutManager = LinearLayoutManager(this)
+        recyclerview.adapter = detailAdapter
+        detailAdapter.notifyDataSetChanged()
+        val imgIcon = findViewById<ImageView>(R.id.image_chanel)
+        val title = findViewById<TextView>(R.id.text_video)
+        val textsub = findViewById<TextView>(R.id.title_chanel)
+        title.text = video.title
+        textsub.text=video.publisher.name
+
+        Picasso.get().load(video.publisher.pictureProfileUrl).into(imgIcon)
+
 
     }
 
